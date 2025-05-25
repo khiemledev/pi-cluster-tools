@@ -86,6 +86,7 @@ echo "=============================="
 echo "\n\n\n"
 echo "Setup aliases for kubectl"
 cp ./kubectl_aliases $HOME/
+chmod +x kubectl_aliases
 echo "\n\nsource $HOME/kubectl_aliases" >> $HOME/.bashrc
 
 echo "=============================="
