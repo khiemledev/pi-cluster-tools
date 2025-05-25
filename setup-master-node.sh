@@ -49,7 +49,7 @@ sudo systemctl daemon-reload
 sudo systemctl enable --now containerd
 
 # Check that containerd service is up and running
-systemctl status containerd
+# systemctl status containerd
 
 echo "=============================="
 printf "\n\n\n"
