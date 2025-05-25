@@ -36,7 +36,7 @@ apt update && apt upgrade -y
 
 # Install packages
 echo "Installing required packages..."
-apt install -y curl wget net-tools iperf3
+apt update && apt install -y curl wget net-tools iperf3
 
 # Backup netplan config
 echo "Backing up ${NETPLAN_FILE} to ${BACKUP_FILE}..."
