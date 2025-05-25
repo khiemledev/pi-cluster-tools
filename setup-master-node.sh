@@ -82,6 +82,11 @@ kubeadm version
 kubelet --version
 kubectl version --client
 
+echo "=============================="
+echo "\n\n\n"
+echo "Setup aliases for kubectl"
+cp ./kubectl_aliases $HOME/
+echo "\n\nsource $HOME/kubectl_aliases" >> $HOME/.bashrc
 
 echo "=============================="
 echo "\n\n\n"
@@ -107,3 +112,4 @@ echo "\n\n\n"
 echo "Allow inbound for APIServer (6443)"
 
 sudo ufw allow 6443
+
