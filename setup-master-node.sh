@@ -88,6 +88,22 @@ echo "\n\n\n"
 echo "Configure crictl to work with containerd"
 sudo crictl config runtime-endpoint unix:///var/run/containerd/containerd.sock
 
+echo "=============================="
+echo "\n\n\n"
+echo "Start master node"
 
 sudo kubeadm init --pod-network-cidr=192.168.0.0/16 --apiserver-advertise-address=$(hostname -I) --node-name master
 
+echo "=============================="
+echo "\n\n\n"
+echo "Copy admin config to ~/.kube"
+
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+echo "=============================="
+echo "\n\n\n"
+echo "Allow inbound for APIServer (6443)"
+
+sudo ufw allow 6443
