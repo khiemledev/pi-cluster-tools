@@ -114,3 +114,13 @@ echo "Allow inbound for APIServer (6443)"
 
 sudo ufw allow 6443
 
+echo "=============================="
+echo "\n\n\n"
+echo "Install calico"
+
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.30.0/manifests/tigera-operator.yaml
+sleep 3 # sleep for 3 seconds to create namespace, etc...
+
+curl https://raw.githubusercontent.com/projectcalico/calico/v3.30.0/manifests/custom-resources.yaml -O
+
+kubectl apply -f custom-resources.yaml
