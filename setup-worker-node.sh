@@ -93,34 +93,3 @@ echo "=============================="
 printf "\n\n\n"
 echo "Configure crictl to work with containerd"
 sudo crictl config runtime-endpoint unix:///var/run/containerd/containerd.sock
-
-echo "=============================="
-printf "\n\n\n"
-echo "Start master node"
-
-sudo kubeadm init --pod-network-cidr=192.168.0.0/16 --apiserver-advertise-address=$(hostname -I) --node-name master
-
-echo "=============================="
-printf "\n\n\n"
-echo "Copy admin config to ~/.kube"
-
-mkdir -p $HOME/.kube
-sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-sudo chown $(id -u):$(id -g) $HOME/.kube/config
-
-echo "=============================="
-printf "\n\n\n"
-echo "Allow inbound for APIServer (6443)"
-
-sudo ufw allow 6443
-
-echo "=============================="
-printf "\n\n\n"
-echo "Install calico"
-
-kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.30.0/manifests/tigera-operator.yaml
-sleep 3 # sleep for 3 seconds to create namespace, etc...
-
-curl https://raw.githubusercontent.com/projectcalico/calico/v3.30.0/manifests/custom-resources.yaml -O
-
-kubectl apply -f custom-resources.yaml
