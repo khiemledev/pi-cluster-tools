@@ -81,3 +81,13 @@ sudo apt-mark hold kubelet kubeadm kubectl
 kubeadm version
 kubelet --version
 kubectl version --client
+
+
+echo "=============================="
+echo "\n\n\n"
+echo "Configure crictl to work with containerd"
+sudo crictl config runtime-endpoint unix:///var/run/containerd/containerd.sock
+
+
+sudo kubeadm init --pod-network-cidr=192.168.0.0/16 --apiserver-advertise-address=$(hostname -I) --node-name master
+
