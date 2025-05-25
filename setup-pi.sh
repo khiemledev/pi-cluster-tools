@@ -13,6 +13,16 @@ if [[ $# -lt 2 ]]; then
   exit 1
 fi
 
+# Recommend using screen
+if [[ -z "$STY" ]]; then
+  echo "Warning: It is recommended to run this script inside a 'screen' session to avoid disconnection issues (especially over SSH)."
+fi
+
+# Optional logging to file
+LOGFILE="/var/log/net_setup_$(date +%Y%m%d_%H%M%S).log"
+exec > >(tee -i "$LOGFILE")
+exec 2>&1
+
 IP_ADDR="$1"
 MODE="$2"
 SSID="$3"
