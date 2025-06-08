@@ -37,4 +37,8 @@ chmod +x /usr/local/bin/speedtest
 cd /
 rm -rf "$TMP_DIR"
 
+echo "Add some aliases"
+# Some aliases for useful command
+printf "\n\nwatch -n 2 vcgencmd measure_temp\n" >> $HOME/.bashrc
+
 echo "First setup complete. Run 'network-setup.sh <IP_ADDRESS> <ethernet|wifi> [SSID] [PASSWORD]' next."
