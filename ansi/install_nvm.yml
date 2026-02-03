@@ -1,0 +1,42 @@
+- name: Install NVM and Node.js LTS
+  hosts: nodes
+  become: false
+  tasks:
+
+    - name: Install required packages
+      apt:
+        name:
+          - curl
+          - ca-certificates
+        state: present
+        update_cache: yes
+      become: true
+
+    - name: Install NVM
+      shell: |
+        curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+      args:
+        creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
+
+    - name: Install Node.js LTS and set default
+      shell: |
+        export NVM_DIR="$HOME/.nvm"
+        source "$NVM_DIR/nvm.sh"
+        nvm install --lts
+        nvm alias default 'lts/*'
+      args:
+        executable: /bin/bash
+
+    - name: Check node version
+      shell: |
+        export NVM_DIR="$HOME/.nvm"
+        source "$NVM_DIR/nvm.sh"
+        node --version
+      args:
+        executable: /bin/bash
+      register: node_version
+
+    - name: Print node version
+      debug:
+        msg: "Node version: {{ node_version.stdout }}"
+
