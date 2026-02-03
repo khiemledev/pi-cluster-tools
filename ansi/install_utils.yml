@@ -2,6 +2,10 @@
   hosts: nodes
   become: true
 
+  vars:
+    target_user: "{{ ansible_user }}"
+    target_home: "/home/{{ target_user }}"
+
   tasks:
     - name: Update apt cache
       apt:
@@ -17,5 +21,45 @@
           - net-tools
           - vim
           - neovim
+          - pipx
         state: present
 
+    - name: Ensure ~/.local/bin exists for target user
+      file:
+        path: "{{ target_home }}/.local/bin"
+        state: directory
+        owner: "{{ target_user }}"
+        group: "{{ target_user }}"
+        mode: "0755"
+
+    - name: Ensure ~/.local/bin is in PATH in ~/.profile for target user
+      lineinfile:
+        path: "{{ target_home }}/.profile"
+        create: true
+        owner: "{{ target_user }}"
+        group: "{{ target_user }}"
+        mode: "0644"
+        line: 'export PATH="$HOME/.local/bin:$PATH"'
+        state: present
+        insertafter: EOF
+
+    - name: Install/upgrade bpytop via pipx as target user
+      become_user: "{{ target_user }}"
+      shell: |
+        pipx install bpytop || pipx upgrade bpytop
+      args:
+        executable: /bin/bash
+
+    - name: Verify bpytop (ensure PATH includes ~/.local/bin)
+      become_user: "{{ target_user }}"
+      shell: |
+        export PATH="$HOME/.local/bin:$PATH"
+        bpytop --version
+      args:
+        executable: /bin/bash
+      register: bpytop_version
+      changed_when: false
+
+    - name: Print bpytop version
+      debug:
+        msg: "bpytop version: {{ bpytop_version.stdout }}"
