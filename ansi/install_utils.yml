@@ -8,12 +8,14 @@
         update_cache: yes
         cache_valid_time: 3600
 
-    - name: Install tmux, screen, htop, net-tools
+    - name: Install utilities
       apt:
         name:
           - tmux
           - screen
           - htop
           - net-tools
+          - vim
+          - neovim
         state: present
 
